@@ -12,6 +12,7 @@ import java.util.Scanner;
 public class AnalyzeWorldPopulation {
 
     public static void main(String[] args) throws Exception {
+//        Scanner sc = new Scanner(System.in);
         final int MAXNUMBER = 100;
 
         int count, found;
@@ -30,32 +31,16 @@ public class AnalyzeWorldPopulation {
         // Invoking the bubble sort
         bubbleSort(year, population, count);
         //Sorted Array
-        System.out.println("\nYear\tWorld Population"); // Print heading of the arrays
-        System.out.println("____\t________________"); // Print heading of the arrays
+        System.out.println("\nYear\tWorld Population");
+        System.out.println("========================");
         for (int i = 0; i < count; i++) {
             // Printing the two arrays side by side
             System.out.printf("%d\t%,d\n", year[i], population[i]);
         }
 
-        //////////////////////////////////
-        /// Search for Mellenial Years ///
-        //////////////////////////////////
-        System.out.println("\n Sequential Search");
-        System.out.println("Millenial Populations"); // Print heading of the arrays
-        for (int value = -5000; value <= 2000; value = value + 1000) {
-            found = sequentialSearch(year, count, value);
-            if (found == -1 && value == 0) {
-                // Do nothing
-
-            } else {
-                System.out.printf("%d\t  %,d\n", year[found], population[found]);
-            }
-
-        }
-
-        //////////////////////////////////
-        /// Search for Mellenial Years ///
-        //////////////////////////////////
+//        /////////////////////////////////////////
+//        /// Binary Search for Mellenial Years ///
+//        /////////////////////////////////////////
         System.out.println("\n  Binary Search");
         System.out.println("Millenial Populations"); // Print heading of the arrays
         for (int value = -5000; value <= 2000; value = value + 1000) {
@@ -67,9 +52,99 @@ public class AnalyzeWorldPopulation {
             }
 
         }
+        /////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////
+        ///////////MEAN MEDIAN AND STANDARD DEVIATION SECTION////////////
+        /////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////
+
+        ///////////////////////////////////////////////////////////////
+        ///// Binary Search for Years between -5000 and -1000 Years ///
+        ///////////////////////////////////////////////////////////////
+        int[] alternativeYearsArray = new int[MAXNUMBER];
+        long[] alternativePopulationArray = new long[MAXNUMBER];
+        int currentCount = 0;
+
+        printTitle();
+        for (int value = -5000; value <= -1000; value = value + 1) {
+            found = binarySearch(year, count, value);
+            if (found == -1) {
+                // Do nothing
+            } else {
+
+                alternativeYearsArray[currentCount] = year[found];
+                alternativePopulationArray[currentCount] = population[found];
+                currentCount++;
+            }
+        }
+        for (int i = 0; i < currentCount; i++) {
+
+            System.out.printf("%d\t%,d\n", alternativeYearsArray[i], alternativePopulationArray[i]);
+        }
+        System.out.printf("\nThe current count of the list above is %d \n", currentCount);
+        long mean = calculateMean(currentCount, alternativePopulationArray);
+        System.out.printf("The Mean population for the list above is %,d\n", mean);
+        calculateMedian(currentCount, alternativePopulationArray);
+        calculateStandardDeviation(currentCount, mean, alternativePopulationArray);
+
+//        System.out.printf("The Mean population for the Millenial years is %,d.\n", mean);
+        ///////////////////////////////////////////////////////////////
+        ///// Binary Search for Years between 1000 and 1900 Years ///
+        ///////////////////////////////////////////////////////////////
+        currentCount = 0;
+        printTitle();
+        for (int value = 1000; value <= 1900; value = value + 1) {
+            found = binarySearch(year, count, value);
+            if (found == -1) {
+                // Do nothing
+            } else {
+
+                alternativeYearsArray[currentCount] = year[found];
+                alternativePopulationArray[currentCount] = population[found];
+                currentCount++;
+            }
+        }
+
+        for (int i = 0; i < currentCount; i++) {
+            // Printing the two arrays side by side
+            System.out.printf("%d\t%,d\n", alternativeYearsArray[i], alternativePopulationArray[i]);
+        }
+        System.out.printf("\nThe current count of the list above is %d \n", currentCount);
+        mean = calculateMean(currentCount, alternativePopulationArray);
+        System.out.printf("The Mean population for the list above is %,d\n", mean);
+        calculateMedian(currentCount, alternativePopulationArray);
+        calculateStandardDeviation(currentCount, mean, alternativePopulationArray);
+
+        ///////////////////////////////////////////////////////////////
+        ///// Binary Search for Years between 2000 and 2020 Years ///
+        ///////////////////////////////////////////////////////////////
+        currentCount = 0;
+        printTitle();
+        for (int value = 2000; value <= 2020; value = value + 1) {
+            found = binarySearch(year, count, value);
+            if (found == -1) {
+                // Do nothing
+            } else {
+                alternativeYearsArray[currentCount] = year[found];
+                alternativePopulationArray[currentCount] = population[found];
+                currentCount++;
+            }
+        }
+
+        for (int i = 0; i < currentCount; i++) {
+            // Printing the two arrays side by side
+            System.out.printf("%d\t%,d\n", alternativeYearsArray[i], alternativePopulationArray[i]);
+        }
+
+        System.out.printf("\nThe current count of the list above is %d \n", currentCount);
+        mean = calculateMean(currentCount, alternativePopulationArray);
+        System.out.printf("The Mean population for the list above is %,d\n", mean);
+        calculateMedian(currentCount, alternativePopulationArray);
+        calculateStandardDeviation(currentCount, mean, alternativePopulationArray);
 
     } // end main
 
+    //////////////////////////////
     //////////////////////////////
     ////////Populate Array////////
     //////////////////////////////
@@ -117,17 +192,9 @@ public class AnalyzeWorldPopulation {
         }//endfor(pass=0... } // end bubbleSort method
     } // end BubbleSort class
 
-    public static int sequentialSearch(int[] x, int n, int item) {
-        int i;
-        for (i = 0; i < n; i++) {
-            if (x[i] == item) {
-                return i;
-            }
-        }
-        return -1;
-    } // end sequentialSearch
-
-    // Binary Search
+    /////////////////////////////////
+    //////// Binary Search //////////
+    /////////////////////////////////
     public static int binarySearch(int[] x, int n, int item) {
         int low = 0;
         int high = n - 1;
@@ -144,5 +211,60 @@ public class AnalyzeWorldPopulation {
         return -1;
     } // end binarySearch method  
 
+    public static long calculateMean(int amountOfNumbers, long x[]) {
+
+        long sum = 0;
+        int i = 0;
+        while (i < amountOfNumbers) {
+
+            sum += x[i];
+
+            i++;
+        }
+
+        long mean = sum / amountOfNumbers;
+//        System.out.printf("The Mean population for the Millenial years is %,d.\n", mean);
+//        calculateStandardDeviation(amountOfNumbers, mean, x);
+
+        return mean;
+    }
+
+    public static void calculateMedian(int amountOfNumbers, long[] x) {
+        int low = 0;
+        int high = amountOfNumbers - 1;
+        int middle = (low + high) / 2;
+        System.out.printf("The Median of the list above is: %,d\n", x[middle]);
+    }
+
+    public static void calculateStandardDeviation(int amountOfNumbers, long mean, long[] x) {
+        long standardDeviation;
+//        ====================
+//        SUBTRACTING THE MEAN
+//        ====================
+        for (int i = 0; i < amountOfNumbers; i++) {
+            x[i] = x[i] - mean;
+        }
+//        =======================
+//        SQUARING THE NEW VALUES
+//        =======================
+        for (int i = 0; i < amountOfNumbers; i++) {
+            x[i] = (long) Math.pow(x[i], 2);
+        }
+//        =====================
+//        MEAN OF SQUARED VALUE
+//        =====================
+        mean = calculateMean(amountOfNumbers, x);
+        standardDeviation = (long) Math.sqrt(mean);
+
+        System.out.printf("The Standard Deviation of the list above is: %,d\n", standardDeviation);
+    }
+
+    public static void printTitle() {
+        System.out.println("\n%%%%%%%%**********************");
+        System.out.println("%%%%%%%%**********************");
+        System.out.println("\nSpecified Years Search");
+        System.out.println("=======================");
+        System.out.println("Years   Populations");
+    }
 } // end of AnalyzeWorldPopulation 
 
